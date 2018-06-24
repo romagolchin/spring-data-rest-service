@@ -1,19 +1,19 @@
 package service;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Contact {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToMany
     private List<Application> applications;
+
+    public Contact() {
+    }
 
     public Contact(List<Application> applications) {
         this.applications = applications;
@@ -33,5 +33,13 @@ public class Contact {
 
     public void setApplications(List<Application> applications) {
         this.applications = applications;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", applications=" + applications +
+                '}';
     }
 }

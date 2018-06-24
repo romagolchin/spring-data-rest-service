@@ -47,4 +47,13 @@ public class Application {
     public void setProductName(String productName) {
         this.productName = productName;
     }
+
+    @Override
+    public String toString() {
+        return "Application{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", productName='" + productName + '\'' +
+                '}';
+    }
 }

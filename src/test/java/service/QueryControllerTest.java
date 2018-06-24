@@ -1,10 +1,12 @@
 package service;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 public class QueryControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -30,6 +32,14 @@ public class QueryControllerTest {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @After
+    public void tearDown() throws Exception {
+        contactRepository.deleteAll();
+        applicationRepository.deleteAll();
+    }
+
+    private static final String LAST_APPLICATION_BY_ID_ENDPOINT = "/lastApplicationByContactId";
 
     @Test
     public void existingContact() throws Exception {
@@ -43,27 +53,32 @@ public class QueryControllerTest {
         }
         Contact contact = contactRepository.save(new Contact(applications));
 
-        mockMvc.perform(get("/lastApplication").param("contactId", "" + contact.getId()))
+        mockMvc.perform(get(LAST_APPLICATION_BY_ID_ENDPOINT).param("contactId", "" + contact.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productName").value("product1"))
-                .andExpect(jsonPath("$.applicationId").value(applications.get(1).getId()))
-                .andExpect(jsonPath("$.dateCreated").value(applications.get(1).getDateCreated().toString()));
+                .andExpect(jsonPath("$.PRODUCT_NAME").value("product1"))
+                .andExpect(jsonPath("$.APPLICATION_ID").value(applications.get(1).getId()))
+                .andExpect(jsonPath("$.CONTACT_ID").value(contact.getId()))
+                .andExpect(jsonPath("$.DT_CREATED").value(applications.get(1).getDateCreated().toString()));
+    }
+
+    private void checkNotFoundById(long id) throws Exception {
+        mockMvc.perform(get(LAST_APPLICATION_BY_ID_ENDPOINT).param("contactId", "" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.PRODUCT_NAME").value((Object) null))
+                .andExpect(jsonPath("$.APPLICATION_ID").value(0))
+                .andExpect(jsonPath("$.CONTACT_ID").value(id))
+                .andExpect(jsonPath("$.DT_CREATED").value((Object) null));
+
     }
 
     @Test
     public void nonExistingContact() throws Exception {
-        mockMvc.perform(get("/lastApplication").param("contactId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productName").value((Object) null));
+        checkNotFoundById(1);
     }
 
     @Test
     public void existingContactWithNoApplications() throws Exception {
         Contact contact = contactRepository.save(new Contact(new ArrayList<>()));
-        mockMvc.perform(get("/lastApplication").param("contactId", "" + contact.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dateCreated").value((Object) null))
-                .andExpect(jsonPath("$.productName").value((Object) null));
-
+        checkNotFoundById(contact.getId());
     }
 }

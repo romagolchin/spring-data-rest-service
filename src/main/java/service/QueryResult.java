@@ -1,17 +1,20 @@
 package service;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Date;
 
 public class QueryResult {
+    @JsonProperty("CONTACT_ID")
     private long contactId;
 
+    @JsonProperty("DT_CREATED")
     private Date dateCreated;
 
-
+    @JsonProperty("APPLICATION_ID")
     private long applicationId;
 
+    @JsonProperty("PRODUCT_NAME")
     private String productName;
 
     public QueryResult(long contactId, Date dateCreated, long applicationId, String productName) {
