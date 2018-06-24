@@ -1,9 +1,6 @@
 package service;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -12,8 +9,10 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(nullable = false)
     private Date dateCreated;
 
+    @Column(nullable = false)
     private String productName;
 
     public Application() {

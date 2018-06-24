@@ -1,6 +1,7 @@
 package service;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,9 +11,11 @@ public class Contact {
     private long id;
 
     @OneToMany
+    @Column(nullable = false)
     private List<Application> applications;
 
     public Contact() {
+        applications = new ArrayList<>();
     }
 
     public Contact(List<Application> applications) {
