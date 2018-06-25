@@ -1,11 +1,12 @@
 package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ClientController {
@@ -16,18 +17,12 @@ public class ClientController {
         this.repository = repository;
     }
 
-    @RequestMapping(path = "/lastApplicationByContactId")
-    public ApplicationDto handleLastApplicationByIdQuery(/* fixme */ @RequestParam(value = "contactId", defaultValue = "1") long contactId) {
-        List<Application> applications = repository.findApplicationsByContactId(contactId);
-        Application lastApplication = new Application();
-        if (!applications.isEmpty()) {
-            lastApplication = applications.get(0);
-            for (Application application : applications) {
-                if (application.getDateCreated().compareTo(lastApplication.getDateCreated()) > 0) {
-                    lastApplication = application;
-                }
-            }
-        }
-        return new ApplicationDto(contactId, lastApplication.getDateCreated(), lastApplication.getId(), lastApplication.getProductName());
+
+    @RequestMapping(path = "/contact/{id}/lastApplication")
+    public Optional<ApplicationDto> handleLastApplicationByIdQuery(@PathVariable long id) {
+        Optional<Application> lastApplication = repository.findApplicationsByContactId(id,
+                PageRequest.of(0, 1)).stream().findFirst();
+        return lastApplication.map(application ->
+                new ApplicationDto(id, application.getDateCreated(), application.getId(), application.getProductName()));
     }
 }

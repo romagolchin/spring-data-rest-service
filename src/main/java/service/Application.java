@@ -9,6 +9,11 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+//    @Column(unique = true)
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Contact contact;
+
     @Column(nullable = false)
     private LocalDateTime dateCreated;
 
@@ -18,7 +23,8 @@ public class Application {
     public Application() {
     }
 
-    public Application(LocalDateTime dateCreated, String productName) {
+    public Application(Contact contact, LocalDateTime dateCreated, String productName) {
+        this.contact = contact;
         this.dateCreated = dateCreated;
         this.productName = productName;
     }

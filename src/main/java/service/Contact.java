@@ -10,7 +10,8 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany
+    @OneToMany(mappedBy = "contact")
+//    @OneToMany
     @Column(nullable = false)
     private List<Application> applications;
 

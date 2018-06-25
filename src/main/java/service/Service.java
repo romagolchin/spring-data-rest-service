@@ -22,17 +22,12 @@ public class Service {
     public ApplicationRunner loadData(ApplicationRepository applicationRepository, ContactRepository contactRepository) {
         return (args) -> {
             int numberOfContacts = 10;
-            List<Application> currentApplications = new ArrayList<>();
             for (int i = 0; i < numberOfContacts; i++) {
-                Application application = new Application(LocalDateTime.now(), "product");
-                Application otherApplication = new Application(LocalDateTime.now(), "product");
-                currentApplications.add(application);
-                currentApplications.add(otherApplication);
-                for (Application a : currentApplications) {
-                    applicationRepository.save(a);
-                }
-//                contactRepository.save(new Contact(currentApplications));
-                currentApplications.clear();
+                Contact contact = contactRepository.save(new Contact());
+                Application application = new Application(contact, LocalDateTime.now(), "product");
+                Application otherApplication = new Application(contact, LocalDateTime.now(), "product");
+                applicationRepository.save(application);
+                applicationRepository.save(otherApplication);
             }
         };
     }
