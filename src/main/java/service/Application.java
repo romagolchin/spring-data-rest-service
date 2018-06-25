@@ -1,7 +1,7 @@
 package service;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Application {
@@ -10,7 +10,7 @@ public class Application {
     private long id;
 
     @Column(nullable = false)
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @Column(nullable = false)
     private String productName;
@@ -18,7 +18,7 @@ public class Application {
     public Application() {
     }
 
-    public Application(Date dateCreated, String productName) {
+    public Application(LocalDateTime dateCreated, String productName) {
         this.dateCreated = dateCreated;
         this.productName = productName;
     }
@@ -31,11 +31,11 @@ public class Application {
         this.id = id;
     }
 
-    public Date getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 

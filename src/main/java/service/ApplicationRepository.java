@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ApplicationRepository extends CrudRepository<Application, Long> {
 
-    @Query("select a from Contact c, in(c.applications) a where c.id = :contactId")
+    @Query("select c.applications from Contact c where c.id = :contactId")
     List<Application> findApplicationsByContactId(@Param("contactId") long contactId);
 }

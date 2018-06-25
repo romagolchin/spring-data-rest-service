@@ -8,18 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class QueryController {
+public class ClientController {
     private ApplicationRepository repository;
 
     @Autowired
-    public QueryController(ApplicationRepository repository) {
+    public ClientController(ApplicationRepository repository) {
         this.repository = repository;
     }
 
-    // if contact with given id does not exist or does not have any applications
-    // 0 is returned for APPLICATION_ID and nulls for both DATE_CREATED and PRODUCT_NAME
     @RequestMapping(path = "/lastApplicationByContactId")
-    public QueryResult handleLastApplicationByIdQuery(@RequestParam(value = "contactId", defaultValue = "1") long contactId) {
+    public ApplicationDto handleLastApplicationByIdQuery(/* fixme */ @RequestParam(value = "contactId", defaultValue = "1") long contactId) {
         List<Application> applications = repository.findApplicationsByContactId(contactId);
         Application lastApplication = new Application();
         if (!applications.isEmpty()) {
@@ -30,6 +28,6 @@ public class QueryController {
                 }
             }
         }
-        return new QueryResult(contactId, lastApplication.getDateCreated(), lastApplication.getId(), lastApplication.getProductName());
+        return new ApplicationDto(contactId, lastApplication.getDateCreated(), lastApplication.getId(), lastApplication.getProductName());
     }
 }

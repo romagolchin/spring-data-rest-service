@@ -2,14 +2,14 @@ package service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-public class QueryResult {
+public class ApplicationDto {
     @JsonProperty("CONTACT_ID")
     private long contactId;
 
     @JsonProperty("DT_CREATED")
-    private Date dateCreated;
+    private LocalDateTime dateCreated;
 
     @JsonProperty("APPLICATION_ID")
     private long applicationId;
@@ -17,7 +17,7 @@ public class QueryResult {
     @JsonProperty("PRODUCT_NAME")
     private String productName;
 
-    public QueryResult(long contactId, Date dateCreated, long applicationId, String productName) {
+    public ApplicationDto(long contactId, LocalDateTime dateCreated, long applicationId, String productName) {
         this.contactId = contactId;
         this.dateCreated = dateCreated;
         this.applicationId = applicationId;
@@ -28,7 +28,7 @@ public class QueryResult {
         return contactId;
     }
 
-    public Date getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
