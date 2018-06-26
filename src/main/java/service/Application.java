@@ -3,6 +3,7 @@ package service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 
 @Entity
@@ -13,7 +14,7 @@ public class Application {
     private long id;
 
     @JsonProperty("CONTACT_ID")
-    
+    @Min(1)
     private long contactId;
 
     @Column(nullable = false)
