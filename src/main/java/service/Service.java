@@ -6,9 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 @SpringBootApplication
 public class Service {
@@ -19,15 +17,12 @@ public class Service {
     // populates in-memory DB. it is not necessary for tests because in tests data is also inserted
     @Profile("!test")
     @Bean
-    public ApplicationRunner loadData(ApplicationRepository applicationRepository, ContactRepository contactRepository) {
+    public ApplicationRunner loadData(ApplicationRepository applicationRepository) {
         return (args) -> {
             int numberOfContacts = 10;
             for (int i = 0; i < numberOfContacts; i++) {
-                Contact contact = contactRepository.save(new Contact());
-                Application application = new Application(contact, LocalDateTime.now(), "product");
-                Application otherApplication = new Application(contact, LocalDateTime.now(), "product");
-                applicationRepository.save(application);
-                applicationRepository.save(otherApplication);
+                applicationRepository.save(new Application(i + 1, LocalDate.now(), "product"));
+                applicationRepository.save(new Application(i + 1, LocalDate.now(), "product"));
             }
         };
     }
